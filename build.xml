@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+/* ***** BEGIN LICENSE BLOCK *****
+ * Copyright (C) 2008-2011, The 100GET-E3-R3G Project Team.
+ * 
+ * This work has been funded by the Federal Ministry of Education
+ * and Research of the Federal Republic of Germany
+ * (BMBF Förderkennzeichen 01BP0775). It is part of the EUREKA project
+ * "100 Gbit/s Carrier-Grade Ethernet Transport Technologies
+ * (CELTIC CP4-001)". The authors alone are responsible for this work.
+ *
+ * See the file AUTHORS for details and contact information.
+ * 
+ * This file is part of MuLaViTo (Multi-Layer Visualization Tool).
+ *
+ * MuLaViTo is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License Version 3 or later
+ * (the "GPL"), or the GNU Lesser General Public License Version 3 or later
+ * (the "LGPL") as published by the Free Software Foundation.
+ *
+ * MuLaViTo is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * or the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License and
+ * GNU Lesser General Public License along with MuLaViTo; see the file
+ * COPYING. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * ***** END LICENSE BLOCK ***** */
+-->
+<project default="init" name="Create JAR for MuLaViTo">
+	<description>Build the MuLaViTo JAR with all dependencies.</description>
+
+	<!-- WARNING! THIS DIRECTORY HAS TO EXIST -->
+	<property name="out" location="${user.home}" />
+
+	<target name="download_check">
+		<available file="${basedir}/jung2.zip" property="jung2.existing" />
+		<available file="${basedir}/batik-1.7.zip" property="batik.existing" />
+	</target>
+
+	<target name="download_jung2" unless="jung2.existing">
+		<!-- skipexisting since Ant 1.8 -->
+		<get src="http://switch.dl.sourceforge.net/project/jung/jung/jung-2.0.1/jung2-2_0_1.zip" dest="${basedir}/jung2.zip" />
+	</target>
+
+	<target name="prepare_jung2" depends="download_jung2">
+		<unzip src="${basedir}/jung2.zip" dest="${basedir}/jung2" overwrite="true">
+			<patternset>
+				<include name="**/*.jar" />
+			</patternset>
+			<mapper type="flatten" />
+		</unzip>
+
+		<jar destfile="${out}/JUNG2.jar" update="true">
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/jung2/collections-generic-4.01.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/jung2/colt-1.2.0.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/jung2/concurrent-1.3.4.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/jung2/jung-api-2.0.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/jung2/jung-algorithms-2.0.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/jung2/jung-graph-impl-2.0.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/jung2/jung-io-2.0.1.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/jung2/jung-visualization-2.0.1.jar" />
+		</jar>
+	</target>
+
+	<target name="download_batik" unless="batik.existing">
+		<!-- skipexisting since Ant 1.8 -->
+		<get src="http://mirror.netcologne.de/apache.org/xmlgraphics/batik/batik-1.7.zip" dest="${basedir}/batik-1.7.zip" />
+	</target>
+
+	<target name="prepare_batik" depends="download_batik">
+		<unzip src="${basedir}/batik-1.7.zip" dest="${basedir}/batik" overwrite="true">
+			<patternset>
+				<include name="**/*.jar" />
+			</patternset>
+			<mapper type="flatten" />
+		</unzip>
+
+		<jar destfile="${out}/Batik.jar" update="true">
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/batik/batik-awt-util.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/batik/batik-dom.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/batik/batik-svggen.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/batik/batik-util.jar" />
+			<zipfileset excludes="META-INF/*.SF" src="${basedir}/batik/batik-xml.jar" />
+		</jar>
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${basedir}/bin" />
+		<javac srcdir="${basedir}/src" destdir="${basedir}/bin" encoding="UTF-8" debug="on" includeantruntime="false">
+			<include name="**/*.java" />
+			<exclude name="tests/**" />
+			<classpath>
+				<pathelement location="${out}/JUNG2.jar" />
+				<pathelement location="${out}/Batik.jar" />
+			</classpath>
+		</javac>
+		<copy todir="${basedir}/bin" failonerror="false">
+			<fileset dir="${basedir}/src" excludes="**/*.java,tests/**" />
+		</copy>
+	</target>
+
+	<target name="init" depends="download_check,prepare_batik,prepare_jung2,compile">
+		<jar destfile="${out}/MuLaViTo.jar" filesetmanifest="mergewithoutmain" update="true">
+			<fileset dir="${basedir}/bin" />
+			<filelist id="docfiles" dir="${basedir}" files="AUTHORS,CHANGELOG,COPYING,README" />
+		</jar>
+		<zip destfile="${out}/MuLaViTo-src.zip" update="true">
+			<fileset dir="${basedir}/src" />
+			<filelist id="docfiles" dir="${basedir}" files="AUTHORS,build.xml,CHANGELOG,COPYING,README" />
+		</zip>
+	</target>
+</project>
