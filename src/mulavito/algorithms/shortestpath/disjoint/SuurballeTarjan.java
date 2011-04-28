@@ -135,8 +135,15 @@ public class SuurballeTarjan<V, E> {
 	public List<List<E>> findTwoWays(List<E> path1, List<E> path2) {
 		if (path1 == null || path2 == null)
 			throw new IllegalArgumentException();
-		if (path1.size() <= 1 && path2.size() <= 1)
-			throw new IllegalArgumentException();
+		else if (path1.isEmpty() || path2.isEmpty()) {
+			// no disjoint solution found
+			LinkedList<List<E>> result = new LinkedList<List<E>>();
+			result.add(path1);
+			result.add(new LinkedList<E>());
+			return result;
+		}
+
+		List<E> copy = new LinkedList<E>(path1);
 
 		// if there is the same link in both paths, delete them
 		Iterator<E> it1 = path1.iterator();
@@ -154,6 +161,14 @@ public class SuurballeTarjan<V, E> {
 					it2.remove();
 				}
 			}
+		}
+
+		if (path1.isEmpty() || path2.isEmpty()) {
+			// no disjoint solution found
+			LinkedList<List<E>> result = new LinkedList<List<E>>();
+			result.add(copy);
+			result.add(new LinkedList<E>());
+			return result;
 		}
 
 		// Now recombine the two paths.

@@ -347,7 +347,29 @@ public class SuurballeTarjanTest {
 		};
 		SuurballeTarjan<String, MyLink> testMain = new SuurballeTarjan<String, MyLink>(
 				g, weightTrans);
-		assertEquals("[[A-D, D-C, C-B], [A-F, F-G, G-B]]",
-				testMain.getDisjointPaths(n1, n5).toString());
+		assertEquals("[[A-D, D-C, C-B], [A-F, F-G, G-B]]", testMain
+				.getDisjointPaths(n1, n5).toString());
+	}
+
+	@Test
+	public void testNoDisjointSolution() {
+		Graph<String, MyLink> g = new DirectedOrderedSparseMultigraph<String, MyLink>();
+
+		String n1 = new String("A"); // A
+		g.addVertex(n1);
+		String n2 = new String("B"); // B
+		g.addVertex(n2);
+
+		g.addEdge(new MyLink(2, "A-B"), n1, n2, EdgeType.DIRECTED);
+
+		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			public Number transform(MyLink link) {
+				return link.getWeight();
+			}
+		};
+		SuurballeTarjan<String, MyLink> testMain = new SuurballeTarjan<String, MyLink>(
+				g, weightTrans);
+		assertEquals("[[A-B], []]", testMain.getDisjointPaths(n1, n2)
+				.toString());
 	}
 }
