@@ -42,7 +42,6 @@ import org.apache.commons.collections15.Transformer;
 import org.junit.Test;
 
 import tests.shortestpaths.utils.MyLink;
-
 import edu.uci.ics.jung.graph.DirectedOrderedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
@@ -56,8 +55,8 @@ public class SuurballeTarjanTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void constructorTest1() {
 		Graph<String, MyLink> g = null;
-		Transformer<MyLink, Double> weightTrans = new Transformer<MyLink, Double>() {
-			public Double transform(MyLink link) {
+		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
 		};
@@ -67,7 +66,7 @@ public class SuurballeTarjanTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void constructorTest2() {
 		Graph<String, MyLink> g = new DirectedOrderedSparseMultigraph<String, MyLink>();
-		Transformer<MyLink, Double> weightTrans = null;
+		Transformer<MyLink, Number> weightTrans = null;
 
 		new SuurballeTarjan<String, MyLink>(g, weightTrans);
 	}
@@ -75,8 +74,8 @@ public class SuurballeTarjanTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void reverseEdgesParameterTest() {
 		Graph<String, MyLink> g = new DirectedOrderedSparseMultigraph<String, MyLink>();
-		Transformer<MyLink, Double> weightTrans = new Transformer<MyLink, Double>() {
-			public Double transform(MyLink link) {
+		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
 		};
@@ -137,8 +136,8 @@ public class SuurballeTarjanTest {
 		path.add(g.findEdge(n2, n3));
 		path.add(g.findEdge(n3, n5));
 
-		Transformer<MyLink, Double> weightTrans = new Transformer<MyLink, Double>() {
-			public Double transform(MyLink link) {
+		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
 		};
@@ -156,7 +155,7 @@ public class SuurballeTarjanTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void findTwoWaysArgumentsTest() {
 		Graph<String, MyLink> g = new DirectedOrderedSparseMultigraph<String, MyLink>();
-		Transformer<MyLink, Double> weightTrans = null;
+		Transformer<MyLink, Number> weightTrans = null;
 		List<MyLink> path1 = new ArrayList<MyLink>();
 		List<MyLink> path2 = new ArrayList<MyLink>();
 		SuurballeTarjan<String, MyLink> twoWaysArgumentsTest = new SuurballeTarjan<String, MyLink>(
@@ -167,8 +166,8 @@ public class SuurballeTarjanTest {
 	@Test
 	public void findTwoWaysTest() {
 		Graph<String, MyLink> g = new DirectedOrderedSparseMultigraph<String, MyLink>();
-		Transformer<MyLink, Double> weightTrans = new Transformer<MyLink, Double>() {
-			public Double transform(MyLink link) {
+		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
 		};
@@ -255,8 +254,8 @@ public class SuurballeTarjanTest {
 		g.addEdge(new MyLink(2, "E-G"), n8, n7, EdgeType.DIRECTED); // E - G
 		g.addEdge(new MyLink(7, "G-F"), n7, n5, EdgeType.DIRECTED); // G - F
 
-		Transformer<MyLink, Double> weightTrans = new Transformer<MyLink, Double>() {
-			public Double transform(MyLink link) {
+		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
 		};
@@ -298,8 +297,8 @@ public class SuurballeTarjanTest {
 		g.addEdge(new MyLink(2, "E-B"), n7, n5, EdgeType.DIRECTED); // G - F
 		g.addEdge(new MyLink(1, "G-B"), n6, n5, EdgeType.DIRECTED); // G - F
 
-		Transformer<MyLink, Double> weightTrans = new Transformer<MyLink, Double>() {
-			public Double transform(MyLink link) {
+		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
 		};
@@ -341,14 +340,14 @@ public class SuurballeTarjanTest {
 		g.addEdge(new MyLink(2, "E-B"), n7, n5, EdgeType.DIRECTED); // G - F
 		g.addEdge(new MyLink(1, "G-B"), n6, n5, EdgeType.DIRECTED); // G - F
 
-		Transformer<MyLink, Double> weightTrans = new Transformer<MyLink, Double>() {
-			public Double transform(MyLink link) {
+		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
 		};
 		SuurballeTarjan<String, MyLink> testMain = new SuurballeTarjan<String, MyLink>(
 				g, weightTrans);
-		assertEquals("[[A-D, D-C, C-B], [A-F, F-G, G-B]]", testMain.suurballe(
-				n1, n5).toString());
+		assertEquals("[[A-D, D-C, C-B], [A-F, F-G, G-B]]",
+				testMain.suurballe(n1, n5).toString());
 	}
 }

@@ -69,7 +69,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
  */
 public class SuurballeTarjan<V, E> {
 	private final Graph<V, E> g;
-	private final Transformer<E, Double> weightTrans;
+	private final Transformer<E, Number> weightTrans;
 	private final DijkstraShortestPath<V, E> dijkstra;
 
 	/**
@@ -80,7 +80,7 @@ public class SuurballeTarjan<V, E> {
 	 * @param weightTrans
 	 *            the weight-transformer
 	 */
-	public SuurballeTarjan(Graph<V, E> g, Transformer<E, Double> weightTrans) {
+	public SuurballeTarjan(Graph<V, E> g, Transformer<E, Number> weightTrans) {
 		if (g == null)
 			throw new IllegalArgumentException();
 		if (weightTrans == null)
@@ -238,7 +238,7 @@ public class SuurballeTarjan<V, E> {
 		Map<E, Double> map = new HashMap<E, Double>();
 
 		for (E link : graph1.getEdges()) {
-			double newWeight = weightTrans.transform(link)
+			double newWeight = weightTrans.transform(link).doubleValue()
 					- slTrans.transform(graph1.getDest(link)).doubleValue()
 					+ slTrans.transform(graph1.getSource(link)).doubleValue();
 
