@@ -100,7 +100,7 @@ public class SuurballeTarjan<V, E> {
 	 *            the target node
 	 * @return two disjoint paths from the source to target node.
 	 */
-	public List<List<E>> suurballe(V source, V target) {
+	public List<List<E>> getDisjointPaths(V source, V target) {
 		List<E> path1 = dijkstra.getPath(source, target);
 
 		// Determine length of shortest path from "source" to any other node.
@@ -233,7 +233,7 @@ public class SuurballeTarjan<V, E> {
 	 *            The shortest length transformer
 	 * @return the transformed graph
 	 */
-	public Transformer<E, Double> lengthTransformation(Graph<V, E> graph1,
+	private Transformer<E, Double> lengthTransformation(Graph<V, E> graph1,
 			Transformer<V, Number> slTrans) {
 		Map<E, Double> map = new HashMap<E, Double>();
 

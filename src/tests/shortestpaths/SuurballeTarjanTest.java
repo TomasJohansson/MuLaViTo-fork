@@ -262,7 +262,7 @@ public class SuurballeTarjanTest {
 		SuurballeTarjan<String, MyLink> testMain = new SuurballeTarjan<String, MyLink>(
 				g, weightTrans);
 		assertEquals("[[S-A, A-C, C-F], [S-D, D-F]]", testMain
-				.suurballe(n1, n5).toString());
+				.getDisjointPaths(n1, n5).toString());
 	}
 
 	@Test
@@ -305,7 +305,7 @@ public class SuurballeTarjanTest {
 		SuurballeTarjan<String, MyLink> testMain = new SuurballeTarjan<String, MyLink>(
 				g, weightTrans);
 		assertEquals("[[A-D, D-E, E-B], [A-C, C-B]]", testMain
-				.suurballe(n1, n5).toString());
+				.getDisjointPaths(n1, n5).toString());
 	}
 
 	@Test
@@ -348,6 +348,6 @@ public class SuurballeTarjanTest {
 		SuurballeTarjan<String, MyLink> testMain = new SuurballeTarjan<String, MyLink>(
 				g, weightTrans);
 		assertEquals("[[A-D, D-C, C-B], [A-F, F-G, G-B]]",
-				testMain.suurballe(n1, n5).toString());
+				testMain.getDisjointPaths(n1, n5).toString());
 	}
 }

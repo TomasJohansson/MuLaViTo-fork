@@ -1,6 +1,7 @@
 CHANGELOG MuLaViTo
 ==================
 
+- Refactor method names of SuurballeTarjan
 - Generalize SuurballeTarjan algorithm by using Number instead of Double
 - Add SampleGraphDocument#createConnectedDemo method
 - Fix of by one error in ReachabilityEnsuringEdgeGenerator
