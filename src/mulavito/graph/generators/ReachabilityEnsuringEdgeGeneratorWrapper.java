@@ -79,10 +79,10 @@ public final class ReachabilityEnsuringEdgeGeneratorWrapper<V extends IVertex, E
 
 		// Add further random edges until full connectivity.
 		while (!unreachables.isEmpty()) {
-			int num = rnd.nextInt(g.getVertexCount());
+			int num = rnd.nextInt(g.getVertexCount() - 1);
 			V v = vs.get(num);
 
-			int num2 = rnd.nextInt(g.getVertexCount());
+			int num2 = rnd.nextInt(g.getVertexCount() - 1);
 			V w = vs.get(num2);
 
 			// Prevent creation of loops and parallel edges.

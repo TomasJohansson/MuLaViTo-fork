@@ -1,6 +1,8 @@
 CHANGELOG MuLaViTo
 ==================
 
+- Fix of by one error in ReachabilityEnsuringEdgeGenerator
+
 Version 0.7, 2011-04-27
 -----------------------
 Initial public release under GPL/LGPL.
