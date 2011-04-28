@@ -28,15 +28,18 @@
  * ***** END LICENSE BLOCK ***** */
 package mulavito.samples.utils;
 
-import java.util.Random;
-
-import org.apache.commons.collections15.Factory;
-
 import mulavito.graph.AbstractLayerStack;
 import mulavito.graph.IEdge;
 import mulavito.graph.ILayer;
 import mulavito.graph.IVertex;
 import mulavito.graph.LayerChangedEvent;
+import mulavito.graph.generators.IEdgeGenerator;
+import mulavito.graph.generators.RandomEdgeGenerator;
+import mulavito.graph.generators.ReachabilityEnsuringEdgeGeneratorWrapper;
+import mulavito.utils.distributions.UniformStream;
+
+import org.apache.commons.collections15.Factory;
+
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
@@ -48,6 +51,7 @@ import edu.uci.ics.jung.graph.util.Pair;
  * multilayergraph changes, all viewing controls will be notified.
  * 
  * @author Julian Ott
+ * @author Michael Duelli
  * @since 2010-08-24
  */
 public class SampleGraphDocument {
@@ -240,7 +244,7 @@ public class SampleGraphDocument {
 	 *            number of layers
 	 */
 	public static SampleGraphDocument createDemo(int numlayers) {
-		Random rnd = new Random();
+		UniformStream rnd = new UniformStream();
 		SampleGraphDocument ret = new SampleGraphDocument();
 		// create 2 layers
 		for (int i = 0; i < numlayers; i++) {
@@ -249,20 +253,56 @@ public class SampleGraphDocument {
 				layer = ret.new MyLA();
 			else
 				layer = ret.new MyLB();
-			int numv = rnd.nextInt(20) + 3, nume = rnd.nextInt(numv * 2);
+
 			// create 3-23 vertices
-			for (int j = 0; j < numv; j++) {
+			int numVertices = rnd.nextInt(20) + 3;
+			for (int j = 0; j < numVertices; j++)
 				layer.addVertex(ret.new MyV());
-			}
+
 			// create 0-2*|V| edges
+			int numEdges = rnd.nextInt(numVertices * 2);
 			MyV[] vertices = layer.getVertices().toArray(new MyV[0]);
-			for (int j = 0; j < nume; j++) {
-				MyV a = vertices[rnd.nextInt(numv)], b = vertices[rnd
-						.nextInt(numv)];
+			for (int j = 0; j < numEdges; j++) {
+				MyV a = vertices[rnd.nextInt(numVertices)], b = vertices[rnd
+						.nextInt(numVertices)];
 				if (a == b || layer.findEdge(a, b) != null)
 					continue;
 				layer.addEdge(layer.getEdgeFactory().create(), a, b);
 			}
+			ret.getMlg().addLayer(layer);
+		}
+		return ret;
+	}
+
+	/**
+	 * Creates a demo document, and fills it with the given number of random
+	 * layers that are guaranteed to be connected
+	 * 
+	 * @param numlayers
+	 *            number of layers
+	 */
+	public static SampleGraphDocument createConnectedDemo(int numlayers) {
+		UniformStream rnd = new UniformStream();
+		SampleGraphDocument ret = new SampleGraphDocument();
+		// create 2 layers
+		for (int i = 0; i < numlayers; i++) {
+			MyL layer;
+			if (i % 2 != 0)
+				layer = ret.new MyLA();
+			else
+				layer = ret.new MyLB();
+
+			// create 3-23 vertices
+			int numVertices = rnd.nextInt(20) + 3;
+			for (int j = 0; j < numVertices; j++)
+				layer.addVertex(ret.new MyV());
+
+			// create 0-2*|V| edges
+			IEdgeGenerator<MyV, MyE> edgeGen = new ReachabilityEnsuringEdgeGeneratorWrapper<MyV, MyE>(
+					new RandomEdgeGenerator<MyV, MyE>(rnd.nextDouble()));
+
+			edgeGen.generate(layer);
+
 			ret.getMlg().addLayer(layer);
 		}
 		return ret;
