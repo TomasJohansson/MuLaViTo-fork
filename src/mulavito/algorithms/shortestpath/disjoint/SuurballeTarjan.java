@@ -29,6 +29,7 @@
 package mulavito.algorithms.shortestpath.disjoint;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -132,27 +133,28 @@ public class SuurballeTarjan<V, E> {
 	 * @return the two disjoint paths
 	 */
 	public List<List<E>> findTwoWays(List<E> path1, List<E> path2) {
-		if (path1 == null && path2 == null)
+		if (path1 == null || path2 == null)
 			throw new IllegalArgumentException();
 		if (path1.size() <= 1 && path2.size() <= 1)
 			throw new IllegalArgumentException();
-		List<E> deleteFromPath1 = new LinkedList<E>();
-		List<E> deleteFromPath2 = new LinkedList<E>();
 
 		// if there is the same link in both paths, delete them
-		for (E iLink : path1)
-			for (E oLink : path2)
+		Iterator<E> it1 = path1.iterator();
+		while (it1.hasNext()) {
+			E iLink = it1.next();
+
+			Iterator<E> it2 = path2.iterator();
+			while (it2.hasNext()) {
+				E oLink = it2.next();
 				if ((g.getSource(iLink).equals(g.getDest(oLink)))
 						&& (g.getDest(iLink).equals(g.getSource(oLink)))
 						|| (g.getSource(iLink).equals(g.getSource(oLink)))
 						&& (g.getDest(iLink).equals(g.getDest(oLink)))) {
-					deleteFromPath1.add(iLink);
-					deleteFromPath2.add(oLink);
+					it1.remove();
+					it2.remove();
 				}
-		for (E e : deleteFromPath1)
-			path1.remove(e);
-		for (E e : deleteFromPath2)
-			path2.remove(e);
+			}
+		}
 
 		// Now recombine the two paths.
 		List<E> union = ListUtils.union(path1, path2);
