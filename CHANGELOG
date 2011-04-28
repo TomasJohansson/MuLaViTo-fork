@@ -1,6 +1,7 @@
 CHANGELOG MuLaViTo
 ==================
 
+- Add demonstrator for Eppstein, Yen, and Suurballe-Tarjan algorithms
 - Resolve issue with Suurballe when no disjoint paths could be found
 - Split SampleGraphDocument into separate classes
   (MyE, MyEA, MyEB, MyL, MyLA, MyLB, MyMLG) for more general accessibility
