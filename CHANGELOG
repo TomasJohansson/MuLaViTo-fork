@@ -1,6 +1,8 @@
 CHANGELOG MuLaViTo
 ==================
 
+- Split SampleGraphDocument into separate classes
+  (MyE, MyEA, MyEB, MyL, MyLA, MyLB, MyMLG) for more general accessibility
 - Refactor method names of SuurballeTarjan
 - Generalize SuurballeTarjan algorithm by using Number instead of Double
 - Add SampleGraphDocument#createConnectedDemo method

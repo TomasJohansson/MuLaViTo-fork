@@ -37,8 +37,6 @@ import java.awt.Stroke;
 import mulavito.gui.components.GraphPanel;
 import mulavito.gui.components.LayerViewer;
 import mulavito.gui.control.ViewerContext;
-import mulavito.samples.utils.SampleGraphDocument.MyE;
-import mulavito.samples.utils.SampleGraphDocument.MyL;
 import mulavito.samples.utils.SampleGraphDocument.MyV;
 
 import org.apache.commons.collections15.Transformer;
@@ -104,7 +102,7 @@ public class SampleGraphPanel extends GraphPanel<MyL, LayerViewer<MyV, MyE>> {
 
 						@Override
 						public Stroke transform(MyE input) {
-							if (input instanceof SampleGraphDocument.MyEA)
+							if (input instanceof MyEA)
 								return RenderContext.DASHED;
 							return new BasicStroke();
 						}

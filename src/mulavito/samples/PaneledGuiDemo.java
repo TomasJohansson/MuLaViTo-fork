@@ -53,9 +53,9 @@ import mulavito.gui.components.LayerViewer;
 import mulavito.gui.components.QuickSearchBar;
 import mulavito.gui.components.selectionpanel.SelectionPanel;
 import mulavito.gui.control.FileDropTargetListener;
+import mulavito.samples.utils.MyE;
+import mulavito.samples.utils.MyL;
 import mulavito.samples.utils.SampleGraphDocument;
-import mulavito.samples.utils.SampleGraphDocument.MyE;
-import mulavito.samples.utils.SampleGraphDocument.MyL;
 import mulavito.samples.utils.SampleGraphDocument.MyV;
 import mulavito.samples.utils.SampleGraphPanel;
 

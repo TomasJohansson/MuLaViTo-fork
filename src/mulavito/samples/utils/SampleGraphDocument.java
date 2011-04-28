@@ -28,21 +28,11 @@
  * ***** END LICENSE BLOCK ***** */
 package mulavito.samples.utils;
 
-import mulavito.graph.AbstractLayerStack;
-import mulavito.graph.IEdge;
-import mulavito.graph.ILayer;
 import mulavito.graph.IVertex;
-import mulavito.graph.LayerChangedEvent;
 import mulavito.graph.generators.IEdgeGenerator;
 import mulavito.graph.generators.RandomEdgeGenerator;
 import mulavito.graph.generators.ReachabilityEnsuringEdgeGeneratorWrapper;
 import mulavito.utils.distributions.UniformStream;
-
-import org.apache.commons.collections15.Factory;
-
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
-import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.graph.util.Pair;
 
 /**
  * simple graph document, currently hosting one multilayergraph, but could also
@@ -59,7 +49,7 @@ public class SampleGraphDocument {
 	 * vertex class for MyL
 	 */
 	public class MyV implements IVertex {
-		private int id = -1;
+		public int id = -1;
 
 		@Override
 		public int getId() {
@@ -75,159 +65,6 @@ public class SampleGraphDocument {
 		public String toString() {
 			return getLabel() + id;
 		}
-	}
-
-	/**
-	 * simple edge class, could fill this with some data
-	 */
-	public abstract class MyE implements IEdge {
-		private int id = -1;
-
-		@Override
-		public int getId() {
-			return id;
-		}
-
-		@Override
-		public String toString() {
-			return "E" + id;
-		}
-	}
-
-	public class MyEA extends MyE {
-		public int paramA;
-	}
-
-	public class MyEB extends MyE {
-		public int paramB;
-	}
-
-	/**
-	 * simple layer class with change support
-	 */
-	@SuppressWarnings("serial")
-	public abstract class MyL extends DirectedSparseMultigraph<MyV, MyE>
-			implements ILayer<MyV, MyE> {
-		private int layer = -1;
-		private MyMLG owner = null;
-
-		@Override
-		public boolean addVertex(MyV vertex) {
-			if (!super.addVertex(vertex))
-				return false;
-			vertex.id = getVertexCount();
-			if (owner != null)
-				owner.fireLayerChanged(this);
-			return true;
-		}
-
-		@Override
-		public boolean removeVertex(MyV vertex) {
-			if (!super.removeVertex(vertex))
-				return false;
-			vertex.id = -1;
-			if (owner != null)
-				owner.fireLayerChanged(this);
-			return true;
-		}
-
-		@Override
-		public boolean addEdge(MyE edge, Pair<? extends MyV> endpoints,
-				EdgeType edgeType) {
-			if (!super.addEdge(edge, endpoints, edgeType))
-				return false;
-			edge.id = getEdgeCount();
-			if (owner != null)
-				owner.fireLayerChanged(this);
-			return true;
-		}
-
-		@Override
-		public boolean removeEdge(MyE edge) {
-			if (!super.removeEdge(edge))
-				return false;
-			edge.id = -1;
-			if (owner != null)
-				owner.fireLayerChanged(this);
-			return true;
-		}
-
-		@Override
-		public String getLabel() {
-			return "Layer " + layer;
-		}
-
-		@Override
-		public int getLayer() {
-			return layer;
-		}
-
-		@Override
-		public int hashCode() {
-			return layer;
-		}
-
-		public MyMLG getOwner() {
-			return owner;
-		}
-	}
-
-	@SuppressWarnings("serial")
-	private class MyLA extends MyL {
-		@Override
-		public Factory<MyE> getEdgeFactory() {
-			return new Factory<MyE>() {
-				@Override
-				public MyE create() {
-					return new MyEA();
-				}
-			};
-		}
-	}
-
-	@SuppressWarnings("serial")
-	private class MyLB extends MyL {
-		@Override
-		public Factory<MyE> getEdgeFactory() {
-			return new Factory<MyE>() {
-				@Override
-				public MyE create() {
-					return new MyEB();
-				}
-			};
-		}
-	}
-
-	/** simple multi-layer graph with change support */
-	private class MyMLG extends AbstractLayerStack<MyL> {
-		private void fireLayerChanged(MyL layer) {
-			fireStateChanged(new LayerChangedEvent<MyL>(this, layer, false));
-		}
-
-		@Override
-		public void addLayer(MyL layer) {
-			if (layer != null && !layers.contains(layer)) {
-				layers.add(layer);
-				layer.layer = layers.size() - 1;
-				layer.owner = this;
-				fireStateChanged(new LayerChangedEvent<MyL>(this, layer, false));
-			}
-		}
-
-		// private void removeLayer(MyL layer) {
-		// if (layers.contains(layer)) {
-		// layers.remove(layer);
-		// layer.layer = -1;
-		// layer.owner = null;
-		// fireStateChanged(new LayerChangedEvent<MyV, MyE>(this, layer,
-		// true));
-		// }
-		// }
-
-		// public void clear() {
-		// while (!layers.isEmpty())
-		// removeLayer(layers.get(0));
-		// }
 	}
 
 	private MyMLG mlg = new MyMLG();
@@ -250,9 +87,9 @@ public class SampleGraphDocument {
 		for (int i = 0; i < numlayers; i++) {
 			MyL layer;
 			if (i % 2 != 0)
-				layer = ret.new MyLA();
+				layer = new MyLA();
 			else
-				layer = ret.new MyLB();
+				layer = new MyLB();
 
 			// create 3-23 vertices
 			int numVertices = rnd.nextInt(20) + 3;
@@ -288,9 +125,9 @@ public class SampleGraphDocument {
 		for (int i = 0; i < numlayers; i++) {
 			MyL layer;
 			if (i % 2 != 0)
-				layer = ret.new MyLA();
+				layer = new MyLA();
 			else
-				layer = ret.new MyLB();
+				layer = new MyLB();
 
 			// create 3-23 vertices
 			int numVertices = rnd.nextInt(20) + 3;
