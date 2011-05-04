@@ -45,10 +45,12 @@ public abstract class AbstractChangeable {
 
 	public final void addChangeListener(ChangeListener l) {
 		listenerList.add(ChangeListener.class, l);
+		fireStateChanged();
 	}
 
 	public final void removeChangeListener(ChangeListener l) {
 		listenerList.remove(ChangeListener.class, l);
+		fireStateChanged();
 	}
 
 	protected final void fireStateChanged() {
