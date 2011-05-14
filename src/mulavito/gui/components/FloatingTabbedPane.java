@@ -54,6 +54,7 @@ public final class FloatingTabbedPane extends JTabbedPane {
 		hiddenMenu.setEnabled(false);
 	}
 
+	@Override
 	public void insertTab(String title, Icon icon, final Component component,
 			String tip, int index) {
 		super.insertTab(title, icon, component, tip, index);

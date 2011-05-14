@@ -129,6 +129,7 @@ public abstract class GraphPanel<L extends ILayer<? extends IVertex, ? extends I
 						// To ensure correct behavior when several layers are
 						// added at the same time, we slightly delay these
 						// calls.
+						@Override
 						public void run() {
 							configureScrollBars();
 							configureSpinner();

@@ -57,6 +57,7 @@ public final class SearchFieldDemo extends Gui implements ActionListener {
 		// Schedule a job for the event-dispatching thread:
 		// creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				SearchFieldDemo main = new SearchFieldDemo();
 				main.pack();
@@ -78,6 +79,7 @@ public final class SearchFieldDemo extends Gui implements ActionListener {
 		super("MuLaViTo SearchBar Demo");
 
 		search = new AbstractSearchField() {
+			@Override
 			protected void search(Pattern pat) {
 				List<Integer> find = new ArrayList<Integer>();
 				for (int i = 0; i < list.getModel().getSize(); i++)

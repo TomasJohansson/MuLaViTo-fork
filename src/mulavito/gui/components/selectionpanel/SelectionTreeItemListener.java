@@ -37,7 +37,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-
 /**
  * {@link ItemListener} for updating {@link SelectionPanel}.
  * 
@@ -81,6 +80,7 @@ public class SelectionTreeItemListener implements ItemListener, ChangeListener {
 		if (!isRunning) {
 			isRunning = true;
 			javax.swing.SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					owner.getTree().updateUI();
 					JTabbedPane parent = null;
@@ -95,10 +95,10 @@ public class SelectionTreeItemListener implements ItemListener, ChangeListener {
 							parent.setSelectedComponent(owner);
 					}
 
-					int es = owner.getTree().getModel().getChildCount(
-							ePath.getLastPathComponent());
-					int vs = owner.getTree().getModel().getChildCount(
-							vPath.getLastPathComponent());
+					int es = owner.getTree().getModel()
+							.getChildCount(ePath.getLastPathComponent());
+					int vs = owner.getTree().getModel()
+							.getChildCount(vPath.getLastPathComponent());
 
 					// title
 					owner.setCaption("Selection"

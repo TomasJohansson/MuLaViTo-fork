@@ -142,6 +142,7 @@ public abstract class FloatablePanel extends JPanel {
 		closeBtn.setToolTipText("hide/close panel");
 		closeBtn.setMargin(new Insets(0, 0, 0, 0));
 		closeBtn.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				close();
 			}

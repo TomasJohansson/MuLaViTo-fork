@@ -235,6 +235,7 @@ public class LayerViewer<V extends IVertex, E extends IEdge> extends
 			addPreRenderPaintable(new BackgroundLabel(this, text));
 	}
 
+	@Override
 	public String toString() {
 		return g.getLabel();
 	}

@@ -43,6 +43,7 @@ public class ToggleVertexLabelTransformer<V extends IVertex> implements Transfor
 		this.enabled = enabled;
 	}
 
+	@Override
 	public String transform(V v) {
 		if (enabled)
 			return v.getLabel();

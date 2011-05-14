@@ -56,6 +56,7 @@ public class SuurballeTarjanTest {
 	public void constructorTest1() {
 		Graph<String, MyLink> g = null;
 		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			@Override
 			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
@@ -75,6 +76,7 @@ public class SuurballeTarjanTest {
 	public void reverseEdgesParameterTest() {
 		Graph<String, MyLink> g = new DirectedOrderedSparseMultigraph<String, MyLink>();
 		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			@Override
 			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
@@ -137,6 +139,7 @@ public class SuurballeTarjanTest {
 		path.add(g.findEdge(n3, n5));
 
 		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			@Override
 			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
@@ -167,6 +170,7 @@ public class SuurballeTarjanTest {
 	public void findTwoWaysTest() {
 		Graph<String, MyLink> g = new DirectedOrderedSparseMultigraph<String, MyLink>();
 		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			@Override
 			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
@@ -255,6 +259,7 @@ public class SuurballeTarjanTest {
 		g.addEdge(new MyLink(7, "G-F"), n7, n5, EdgeType.DIRECTED); // G - F
 
 		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			@Override
 			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
@@ -298,6 +303,7 @@ public class SuurballeTarjanTest {
 		g.addEdge(new MyLink(1, "G-B"), n6, n5, EdgeType.DIRECTED); // G - F
 
 		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			@Override
 			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
@@ -341,6 +347,7 @@ public class SuurballeTarjanTest {
 		g.addEdge(new MyLink(1, "G-B"), n6, n5, EdgeType.DIRECTED); // G - F
 
 		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			@Override
 			public Number transform(MyLink link) {
 				return link.getWeight();
 			}
@@ -363,6 +370,7 @@ public class SuurballeTarjanTest {
 		g.addEdge(new MyLink(2, "A-B"), n1, n2, EdgeType.DIRECTED);
 
 		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			@Override
 			public Number transform(MyLink link) {
 				return link.getWeight();
 			}

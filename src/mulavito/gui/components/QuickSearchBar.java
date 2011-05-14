@@ -50,11 +50,13 @@ public final class QuickSearchBar<L extends ILayer<? extends IVertex, ? extends 
 
 	public QuickSearchBar() {
 		supp = new GraphPanelChangeSupport<L, LV>() {
+			@Override
 			protected void onLayerViewerAdd(LV vv) {
 				setEditable(getLayerStack() != null
 						&& !getLayerStack().isEmpty());
 			}
 
+			@Override
 			protected void onLayerViewerRemove(LV vv) {
 				setEditable(getLayerStack() != null
 						&& !getLayerStack().isEmpty());

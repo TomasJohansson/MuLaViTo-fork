@@ -88,6 +88,7 @@ public class MouseOverHintManager extends MouseAdapter {
 		return hint;
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 		Component comp = (Component) e.getSource();
 		String hint;
@@ -99,6 +100,7 @@ public class MouseOverHintManager extends MouseAdapter {
 			hintLabel.setText(hint);
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 		hintLabel.setText(getStatus());
 	}
