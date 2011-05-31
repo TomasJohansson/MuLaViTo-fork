@@ -1,6 +1,8 @@
 CHANGELOG MuLaViTo
 ==================
 
+Version 0.8, 2011-05-31
+-----------------------
 - Better check for Java version on Apple
 - Force build script to Java 1.5 code
 - Fix compilation issue (SelectionPanelMouseAdapter) on Microsoft Windows
