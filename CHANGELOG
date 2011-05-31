@@ -1,6 +1,7 @@
 CHANGELOG MuLaViTo
 ==================
 
+- Force build script to Java 1.5 code
 - Fix compilation issue (SelectionPanelMouseAdapter) on Microsoft Windows
   using the ant build script
 - Fix ClassScanner on Microsoft Windows platforms
