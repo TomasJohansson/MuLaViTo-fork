@@ -1,6 +1,9 @@
 CHANGELOG MuLaViTo
 ==================
 
+- Add missing @Override annotations
+- Fire update whenever a changelister is added or removed
+- Update ignore file for automatic downloads
 - Add demonstrator for Eppstein, Yen, and Suurballe-Tarjan algorithms
 - Resolve issue with Suurballe when no disjoint paths could be found
 - Split SampleGraphDocument into separate classes
