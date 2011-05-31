@@ -32,6 +32,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -115,23 +117,29 @@ public final class ClassScanner {
 		String source = caller.getProtectionDomain().getCodeSource()
 				.getLocation().getPath();
 		if (source.toLowerCase().endsWith(".jar"))
-			return getClassesFromJARFile(source, pckgname);
-		return getClassesLocal(pckgname);
+			try {
+				return getClassesFromJARFile(caller.getProtectionDomain()
+						.getCodeSource().getLocation().toURI(), pckgname);
+			} catch (URISyntaxException e) {
+				throw new AssertionError(e);
+			}
+		else
+			return getClassesLocal(pckgname);
 	}
 
 	/**
 	 * @see http://stackoverflow.com/questions/346811/listing-the-files-in-a-
 	 *      directory-of-the-current-jar-file
 	 */
-	private static Class<?>[] getClassesFromJARFile(String jar,
-			String packageName) throws ClassNotFoundException {
+	private static Class<?>[] getClassesFromJARFile(URI jar, String packageName)
+			throws ClassNotFoundException {
 		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
 		JarInputStream jarFile = null;
 		try {
-			jarFile = new JarInputStream(new FileInputStream(jar));
+			jarFile = new JarInputStream(new FileInputStream(new File(jar)));
 			// search all entries
 			for (JarEntry jarEntry; (jarEntry = jarFile.getNextJarEntry()) != null;) {
-				// match wieth packet name
+				// match with packet name
 				String className = jarEntry.getName();
 				if (className.endsWith(".class")) {
 					className = className.substring(0,
@@ -143,13 +151,14 @@ public final class ClassScanner {
 			}
 		} catch (IOException ex) {
 			throw new ClassNotFoundException(ex.getMessage());
-		} finally {
-			// try to close in any case
-			try {
-				jarFile.close();
-			} catch (IOException ex) {
-			}
 		}
+
+		// try to close in any case
+		try {
+			jarFile.close();
+		} catch (IOException ex) {
+		}
+
 		return classes.toArray(new Class<?>[classes.size()]);
 	}
 

@@ -1,6 +1,7 @@
 CHANGELOG MuLaViTo
 ==================
 
+- Fix ClassScanner on Microsoft Windows platforms
 - Add missing @Override annotations
 - Fire update whenever a changelister is added or removed
 - Update ignore file for automatic downloads
