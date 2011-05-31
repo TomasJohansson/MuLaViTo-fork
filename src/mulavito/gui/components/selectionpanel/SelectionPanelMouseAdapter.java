@@ -94,6 +94,7 @@ public final class SelectionPanelMouseAdapter extends MouseAdapter {
 							Object last = path.getLastPathComponent();
 
 							if (last instanceof IVertex) {
+								IVertex v = (IVertex) last;
 								// unpick vertex, search all layers for the
 								// given vertex
 								for (LayerViewer<?, ?> vv : gp.getViewers()) {
@@ -102,17 +103,18 @@ public final class SelectionPanelMouseAdapter extends MouseAdapter {
 									// generics are not checked at runtime
 									// and vertex is for sure of the expected
 									// instance type
-									((PickedState<Object>) vv
-											.getPickedVertexState()).pick(last,
+									((PickedState<IVertex>) vv
+											.getPickedVertexState()).pick(v,
 											false);
 								}
 							} else if (last instanceof IEdge) {
+								IEdge e = (IEdge) last;
 								// unpick edge, search all layers for the
 								// given edge
 								for (LayerViewer<?, ?> vv : gp.getViewers()) {
 									// same workaround as atop
-									((PickedState<Object>) vv
-											.getPickedEdgeState()).pick(last,
+									((PickedState<IEdge>) vv
+											.getPickedEdgeState()).pick(e,
 											false);
 								}
 							}

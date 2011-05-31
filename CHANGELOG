@@ -1,6 +1,8 @@
 CHANGELOG MuLaViTo
 ==================
 
+- Fix compilation issue (SelectionPanelMouseAdapter) on Microsoft Windows
+  using the ant build script
 - Fix ClassScanner on Microsoft Windows platforms
 - Add missing @Override annotations
 - Fire update whenever a changelister is added or removed
