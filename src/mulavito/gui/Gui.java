@@ -112,9 +112,11 @@ public class Gui extends JFrame {
 		super(title);
 
 		if (!((System.getProperty("java.vendor").indexOf(
-				"Sun Microsystems Inc.") >= 0 || System.getProperty(
-				"java.vendor").indexOf("Oracle Corporation") >= 0) && System
-				.getProperty("java.vm.name").indexOf("Java HotSpot(TM)") >= 0)) {
+				"Sun Microsystems Inc.") >= 0
+				|| System.getProperty("java.vendor").indexOf(
+						"Oracle Corporation") >= 0 || System.getProperty(
+				"java.vendor").indexOf("Apple") >= 0) && System.getProperty(
+				"java.vm.name").indexOf("Java HotSpot(TM)") >= 0)) {
 			if (JOptionPane.showConfirmDialog(this, "Java version Problem:\n"
 					+ "This application requires Sun/Oracle Java.\n"
 					+ "There are known visualization problems with OpenJDK.\n"
@@ -128,7 +130,7 @@ public class Gui extends JFrame {
 
 		try {
 			// LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
-			//			
+			//
 			// for (LookAndFeelInfo laf : lafs)
 			// System.out.println(laf.getName());
 
