@@ -80,7 +80,7 @@
 
 		<jar destfile="${out}/Batik.jar" update="true">
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/batik/batik-awt-util.jar" />
-			<zipfileset excludes="META-INF/*.SF" src="${basedir}/batik/batik-dom.jar" />
+			<zipfileset excludes="META-INF/*.SF,META-INF/LICENSE,META-INF/NOTICE" src="${basedir}/batik/batik-dom.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/batik/batik-svggen.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/batik/batik-util.jar" />
 			<zipfileset excludes="META-INF/*.SF" src="${basedir}/batik/batik-xml.jar" />
