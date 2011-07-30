@@ -34,6 +34,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import mulavito.algorithms.shortestpath.ShortestPathAlgorithm;
+
 import org.apache.commons.collections15.ListUtils;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.MapTransformer;
@@ -64,32 +66,21 @@ import edu.uci.ics.jung.graph.util.EdgeType;
  *   Bell Laboratories,Murray Hill, New Jersey
  * </pre>
  * 
- * @author Thilo Mueller
  * @author Michael Duelli
+ * @author Thilo Mueller
  * @since 2010-09-15
  */
-public class SuurballeTarjan<V, E> {
-	private final Graph<V, E> g;
-	private final Transformer<E, Number> weightTrans;
-	private final DijkstraShortestPath<V, E> dijkstra;
-
+public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 	/**
 	 * Constructor of the SuurballeTarjan-Algorithm
 	 * 
-	 * @param g
+	 * @param graph
 	 *            the original graph
-	 * @param weightTrans
+	 * @param nev
 	 *            the weight-transformer
 	 */
-	public SuurballeTarjan(Graph<V, E> g, Transformer<E, Number> weightTrans) {
-		if (g == null)
-			throw new IllegalArgumentException();
-		if (weightTrans == null)
-			throw new IllegalArgumentException();
-
-		this.g = g;
-		this.weightTrans = weightTrans;
-		this.dijkstra = new DijkstraShortestPath<V, E>(g, weightTrans);
+	public SuurballeTarjan(Graph<V, E> graph, Transformer<E, Number> nev) {
+		super(graph, nev);
 	}
 
 	/**
@@ -108,16 +99,16 @@ public class SuurballeTarjan<V, E> {
 		Map<V, Number> lengthMap = dijkstra.getDistanceMap(source);
 
 		// Length transformation.
-		Transformer<E, Double> lengthTrans = lengthTransformation(g,
+		Transformer<E, Double> lengthTrans = lengthTransformation(graph,
 				MapTransformer.getInstance(lengthMap));
 
-		DijkstraShortestPath<V, E> alg3 = new DijkstraShortestPath<V, E>(g,
+		DijkstraShortestPath<V, E> alg3 = new DijkstraShortestPath<V, E>(graph,
 				lengthTrans);
 		List<E> l3 = alg3.getPath(source, target);
 
 		// Get shortest path in g with reversed shortest Dijkstra path...
 		DijkstraShortestPath<V, E> alg4 = new DijkstraShortestPath<V, E>(
-				reverseEdges(g, l3), lengthTrans);
+				reverseEdges(graph, l3), lengthTrans);
 		List<E> path2 = alg4.getPath(source, target);
 
 		return findTwoWays(path1, path2);
@@ -153,10 +144,11 @@ public class SuurballeTarjan<V, E> {
 			Iterator<E> it2 = path2.iterator();
 			while (it2.hasNext()) {
 				E oLink = it2.next();
-				if ((g.getSource(iLink).equals(g.getDest(oLink)))
-						&& (g.getDest(iLink).equals(g.getSource(oLink)))
-						|| (g.getSource(iLink).equals(g.getSource(oLink)))
-						&& (g.getDest(iLink).equals(g.getDest(oLink)))) {
+				if ((graph.getSource(iLink).equals(graph.getDest(oLink)))
+						&& (graph.getDest(iLink).equals(graph.getSource(oLink)))
+						|| (graph.getSource(iLink).equals(graph
+								.getSource(oLink)))
+						&& (graph.getDest(iLink).equals(graph.getDest(oLink)))) {
 					it1.remove();
 					it2.remove();
 				}
@@ -173,15 +165,15 @@ public class SuurballeTarjan<V, E> {
 
 		// Now recombine the two paths.
 		List<E> union = ListUtils.union(path1, path2);
-		final V target = g.getDest(path1.get(path1.size() - 1));
+		final V target = graph.getDest(path1.get(path1.size() - 1));
 
 		LinkedList<E> p1 = new LinkedList<E>(); // provides getLast
 		p1.add(path1.get(0));
 		union.remove(path1.get(0));
 		V curDest;
-		while (!(curDest = g.getDest(p1.getLast())).equals(target)) {
+		while (!(curDest = graph.getDest(p1.getLast())).equals(target)) {
 			for (E e : union)
-				if (g.getSource(e).equals(curDest)) {
+				if (graph.getSource(e).equals(curDest)) {
 					p1.add(e);
 					break;
 				}
@@ -191,9 +183,9 @@ public class SuurballeTarjan<V, E> {
 		LinkedList<E> p2 = new LinkedList<E>(); // provides getLast
 		p2.add(path2.get(0));
 		union.remove(path2.get(0));
-		while (!(curDest = g.getDest(p2.getLast())).equals(target)) {
+		while (!(curDest = graph.getDest(p2.getLast())).equals(target)) {
 			for (E e : union)
-				if (g.getSource(e).equals(curDest)) {
+				if (graph.getSource(e).equals(curDest)) {
 					p2.add(e);
 					break;
 				}
@@ -255,7 +247,7 @@ public class SuurballeTarjan<V, E> {
 		Map<E, Double> map = new HashMap<E, Double>();
 
 		for (E link : graph1.getEdges()) {
-			double newWeight = weightTrans.transform(link).doubleValue()
+			double newWeight = nev.transform(link).doubleValue()
 					- slTrans.transform(graph1.getDest(link)).doubleValue()
 					+ slTrans.transform(graph1.getSource(link)).doubleValue();
 
