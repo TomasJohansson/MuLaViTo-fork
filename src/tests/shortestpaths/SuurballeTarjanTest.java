@@ -227,6 +227,30 @@ public class SuurballeTarjanTest {
 	}
 
 	@Test
+	public void testUnreachable() {
+		Graph<String, MyLink> g = new DirectedOrderedSparseMultigraph<String, MyLink>();
+
+		String n1 = new String("S"); // S
+		g.addVertex(n1);
+		String n2 = new String("A"); // A
+		g.addVertex(n2);
+		String n3 = new String("B"); // B -- not connected
+		g.addVertex(n3);
+
+		g.addEdge(new MyLink(1, "S-A"), n1, n2, EdgeType.DIRECTED); // S - A
+
+		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			@Override
+			public Number transform(MyLink link) {
+				return link.getWeight();
+			}
+		};
+		SuurballeTarjan<String, MyLink> testMain = new SuurballeTarjan<String, MyLink>(
+				g, weightTrans);
+		assertEquals(null, testMain.getDisjointPaths(n1, n3));
+	}
+
+	@Test
 	public void testSuurballe1() {
 		Graph<String, MyLink> g = new DirectedOrderedSparseMultigraph<String, MyLink>();
 
@@ -268,6 +292,39 @@ public class SuurballeTarjanTest {
 				g, weightTrans);
 		assertEquals("[[S-A, A-C, C-F], [S-D, D-F]]", testMain
 				.getDisjointPaths(n1, n5).toString());
+	}
+
+	@Test
+	public void testTargetRemoval() {
+		Graph<String, MyLink> g = new DirectedOrderedSparseMultigraph<String, MyLink>();
+
+		String n1 = new String("S"); // S
+		g.addVertex(n1);
+		String n2 = new String("A"); // A
+		g.addVertex(n2);
+		String n3 = new String("B"); // B
+		g.addVertex(n3);
+		String n4 = new String("C"); // C
+		g.addVertex(n4);
+		String n5 = new String("D"); // D
+		g.addVertex(n5);
+
+		g.addEdge(new MyLink(3, "S-A"), n1, n2, EdgeType.DIRECTED); // S - A
+		g.addEdge(new MyLink(1, "A-C"), n2, n4, EdgeType.DIRECTED); // A - C
+		g.addEdge(new MyLink(3, "S-B"), n1, n3, EdgeType.DIRECTED); // S - B
+		g.addEdge(new MyLink(3, "B-C"), n3, n4, EdgeType.DIRECTED); // B - C
+		g.addEdge(new MyLink(3, "C-D"), n4, n5, EdgeType.DIRECTED); // C - D
+
+		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			@Override
+			public Number transform(MyLink link) {
+				return link.getWeight();
+			}
+		};
+		SuurballeTarjan<String, MyLink> testMain = new SuurballeTarjan<String, MyLink>(
+				g, weightTrans);
+		assertEquals("[[S-A, A-C, C-D]]", testMain.getDisjointPaths(n1, n5)
+				.toString());
 	}
 
 	@Test
@@ -377,7 +434,6 @@ public class SuurballeTarjanTest {
 		};
 		SuurballeTarjan<String, MyLink> testMain = new SuurballeTarjan<String, MyLink>(
 				g, weightTrans);
-		assertEquals("[[A-B], []]", testMain.getDisjointPaths(n1, n2)
-				.toString());
+		assertEquals("[[A-B]]", testMain.getDisjointPaths(n1, n2).toString());
 	}
 }

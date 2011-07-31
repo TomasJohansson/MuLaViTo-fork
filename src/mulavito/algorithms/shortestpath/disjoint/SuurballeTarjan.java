@@ -93,7 +93,10 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 	 * @return two disjoint paths from the source to target node.
 	 */
 	public List<List<E>> getDisjointPaths(V source, V target) {
-		List<E> path1 = dijkstra.getPath(source, target);
+		if (dijkstra.getDistance(source, target) == null)
+			return null; // target is not reachable!
+
+		List<E> sp = dijkstra.getPath(source, target);
 
 		// Determine length of shortest path from "source" to any other node.
 		Map<V, Number> lengthMap = dijkstra.getDistanceMap(source);
@@ -102,39 +105,32 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 		Transformer<E, Double> lengthTrans = lengthTransformation(graph,
 				MapTransformer.getInstance(lengthMap));
 
-		DijkstraShortestPath<V, E> alg3 = new DijkstraShortestPath<V, E>(graph,
-				lengthTrans);
-		List<E> l3 = alg3.getPath(source, target);
+		// Get shortest path in g with reversed shortest path...
+		DijkstraShortestPath<V, E> revDijkstra = new DijkstraShortestPath<V, E>(
+				reverseEdges(graph, sp), lengthTrans);
 
-		// Get shortest path in g with reversed shortest Dijkstra path...
-		DijkstraShortestPath<V, E> alg4 = new DijkstraShortestPath<V, E>(
-				reverseEdges(graph, l3), lengthTrans);
-		List<E> path2 = alg4.getPath(source, target);
+		if (revDijkstra.getDistance(source, target) == null) {
+			// no alternate path
+			List<List<E>> result = new LinkedList<List<E>>();
+			result.add(sp);
+			return result;
+		}
 
-		return findTwoWays(path1, path2);
+		return findTwoWays(sp, revDijkstra.getPath(source, target));
 	}
 
 	/**
 	 * Combines two disjoint paths from two SuurballeTarjan input paths.
 	 * 
 	 * @param path1
-	 *            List with some links
+	 *            Dijkstra shortest path
 	 * @param path2
-	 *            List with some links
+	 *            Dijkstra shortest path in partly reverted graph
 	 * @return the two disjoint paths
 	 */
 	public List<List<E>> findTwoWays(List<E> path1, List<E> path2) {
-		if (path1 == null || path2 == null)
-			throw new IllegalArgumentException();
-		else if (path1.isEmpty() || path2.isEmpty()) {
-			// no disjoint solution found
-			LinkedList<List<E>> result = new LinkedList<List<E>>();
-			result.add(path1);
-			result.add(new LinkedList<E>());
-			return result;
-		}
-
-		List<E> copy = new LinkedList<E>(path1);
+		List<E> spCopy = new LinkedList<E>(path1);
+		final V target = graph.getDest(spCopy.get(spCopy.size() - 1));
 
 		// if there is the same link in both paths, delete them
 		Iterator<E> it1 = path1.iterator();
@@ -144,40 +140,58 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 			Iterator<E> it2 = path2.iterator();
 			while (it2.hasNext()) {
 				E oLink = it2.next();
-				if ((graph.getSource(iLink).equals(graph.getDest(oLink)))
-						&& (graph.getDest(iLink).equals(graph.getSource(oLink)))
-						|| (graph.getSource(iLink).equals(graph
-								.getSource(oLink)))
-						&& (graph.getDest(iLink).equals(graph.getDest(oLink)))) {
+				// ensure node disjointness
+				if ((graph.isSource(graph.getDest(oLink), iLink) && graph
+						.isDest(graph.getSource(oLink), iLink))
+						|| (graph.isSource(graph.getSource(oLink), iLink) && graph
+								.isDest(graph.getDest(oLink), iLink))) {
+					if (graph.isDest(target, iLink)) {
+						// Removing required edge, so there is no solution
+						LinkedList<List<E>> result = new LinkedList<List<E>>();
+						result.add(spCopy);
+						return result;
+					}
+
 					it1.remove();
 					it2.remove();
+					break; // inner loop
 				}
 			}
 		}
 
 		if (path1.isEmpty() || path2.isEmpty()) {
-			// no disjoint solution found
+			// no disjoint solution found, just return shortest path
 			LinkedList<List<E>> result = new LinkedList<List<E>>();
-			result.add(copy);
-			result.add(new LinkedList<E>());
+			result.add(spCopy);
 			return result;
 		}
 
 		// Now recombine the two paths.
-		List<E> union = ListUtils.union(path1, path2);
-		final V target = graph.getDest(path1.get(path1.size() - 1));
+		List<E> union = ListUtils.union(path1, path2); // concatenate
 
 		LinkedList<E> p1 = new LinkedList<E>(); // provides getLast
 		p1.add(path1.get(0));
 		union.remove(path1.get(0));
 		V curDest;
 		while (!(curDest = graph.getDest(p1.getLast())).equals(target)) {
+			boolean progress = false;
 			for (E e : union)
 				if (graph.getSource(e).equals(curDest)) {
 					p1.add(e);
+					progress = true;
+					union.remove(e);
 					break;
 				}
-			union.remove(p1.getLast());
+
+			if (!progress)
+				throw new AssertionError("infinite loop");
+
+			if (union.isEmpty()) {
+				if (!graph.isDest(target, p1.getLast())) {
+					throw new AssertionError("bug");
+				} else
+					break;
+			}
 		}
 
 		LinkedList<E> p2 = new LinkedList<E>(); // provides getLast
@@ -185,7 +199,7 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 		union.remove(path2.get(0));
 		while (!(curDest = graph.getDest(p2.getLast())).equals(target)) {
 			for (E e : union)
-				if (graph.getSource(e).equals(curDest)) {
+				if (graph.isSource(curDest, e)) {
 					p2.add(e);
 					break;
 				}
