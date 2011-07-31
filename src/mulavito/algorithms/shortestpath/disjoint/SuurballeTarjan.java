@@ -141,10 +141,12 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 			while (it2.hasNext()) {
 				E oLink = it2.next();
 				// ensure node disjointness
-				if ((graph.isSource(graph.getDest(oLink), iLink) && graph
-						.isDest(graph.getSource(oLink), iLink))
-						|| (graph.isSource(graph.getSource(oLink), iLink) && graph
-								.isDest(graph.getDest(oLink), iLink))) {
+				if (iLink.equals(oLink)) { // for multigraph
+					// if ((graph.isSource(graph.getDest(oLink), iLink) && graph
+					// .isDest(graph.getSource(oLink), iLink))
+					// || (graph.isSource(graph.getSource(oLink), iLink) &&
+					// graph
+					// .isDest(graph.getDest(oLink), iLink))) {
 					if (graph.isDest(target, iLink)) {
 						// Removing required edge, so there is no solution
 						LinkedList<List<E>> result = new LinkedList<List<E>>();
@@ -221,7 +223,7 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 	 * @param graph
 	 *            the input graph which will not be changed.
 	 * @param path
-	 *            the path tu reverse
+	 *            the path to reverse
 	 * @return a new graph with the reversed path
 	 */
 	public Graph<V, E> reverseEdges(Graph<V, E> graph, List<E> path) {
