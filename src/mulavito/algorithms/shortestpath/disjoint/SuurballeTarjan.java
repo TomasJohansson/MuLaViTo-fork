@@ -128,7 +128,7 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 	 *            Dijkstra shortest path in partly reverted graph
 	 * @return the two disjoint paths
 	 */
-	public List<List<E>> findTwoWays(List<E> path1, List<E> path2) {
+	private List<List<E>> findTwoWays(List<E> path1, List<E> path2) {
 		List<E> spCopy = new LinkedList<E>(path1);
 		final V target = graph.getDest(spCopy.get(spCopy.size() - 1));
 
@@ -226,7 +226,7 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 	 *            the path to reverse
 	 * @return a new graph with the reversed path
 	 */
-	public Graph<V, E> reverseEdges(Graph<V, E> graph, List<E> path) {
+	private Graph<V, E> reverseEdges(Graph<V, E> graph, List<E> path) {
 		if (graph == null || path == null)
 			throw new IllegalArgumentException();
 		Graph<V, E> clone = new DirectedOrderedSparseMultigraph<V, E>();
