@@ -28,6 +28,7 @@
  * ***** END LICENSE BLOCK ***** */
 package mulavito.algorithms.shortestpath.disjoint;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -66,6 +67,8 @@ import edu.uci.ics.jung.graph.util.EdgeType;
  *   Bell Laboratories,Murray Hill, New Jersey
  * </pre>
  * 
+ * @see http://en.wikipedia.org/wiki/Suurballe%27s_algorithm
+ * 
  * @author Michael Duelli
  * @author Thilo Mueller
  * @since 2010-09-15
@@ -80,7 +83,32 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 	 *            the weight-transformer
 	 */
 	public SuurballeTarjan(Graph<V, E> graph, Transformer<E, Number> nev) {
+		this(graph, nev, null);
+	}
+
+	private final Comparator<E> defaultComparator = new Comparator<E>() {
+		@Override
+		public int compare(E o1, E o2) {
+			return o1.equals(o2) ? 0 : 1;
+		}
+	};
+
+	/**
+	 * A comparator to decide whether two edges are seen as equal. This allows
+	 * to generalize the concept of edge equity for future usage.
+	 * 
+	 * @since 2011-08-07
+	 */
+	private final Comparator<E> comparator;
+
+	public SuurballeTarjan(Graph<V, E> graph, Transformer<E, Number> nev,
+			Comparator<E> comparator) {
 		super(graph, nev);
+
+		if (comparator == null)
+			this.comparator = defaultComparator;
+		else
+			this.comparator = comparator;
 	}
 
 	/**
@@ -140,13 +168,8 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 			Iterator<E> it2 = path2.iterator();
 			while (it2.hasNext()) {
 				E oLink = it2.next();
-				// ensure node disjointness
-				if (iLink.equals(oLink)) { // for multigraph
-					// if ((graph.isSource(graph.getDest(oLink), iLink) && graph
-					// .isDest(graph.getSource(oLink), iLink))
-					// || (graph.isSource(graph.getSource(oLink), iLink) &&
-					// graph
-					// .isDest(graph.getDest(oLink), iLink))) {
+				// ensure disjointness
+				if (comparator.compare(iLink, oLink) == 0) { // for multigraph
 					if (graph.isDest(target, iLink)) {
 						// Removing required edge, so there is no solution
 						LinkedList<List<E>> result = new LinkedList<List<E>>();
