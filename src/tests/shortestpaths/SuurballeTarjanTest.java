@@ -167,6 +167,53 @@ public class SuurballeTarjanTest {
 	}
 
 	@Test
+	public void testTrapTopology() {
+		Graph<String, MyLink> g = new DirectedOrderedSparseMultigraph<String, MyLink>();
+
+		String nS = new String("S");
+		g.addVertex(nS);
+		String nA = new String("A");
+		g.addVertex(nA);
+		String nB = new String("B");
+		g.addVertex(nB);
+		String nD = new String("D");
+		g.addVertex(nD);
+
+		String nE = new String("E");
+		g.addVertex(nE);
+		String nF = new String("F");
+		g.addVertex(nF);
+
+		String nG = new String("G");
+		g.addVertex(nG);
+		String nH = new String("H");
+		g.addVertex(nH);
+
+		g.addEdge(new MyLink(1, "S-A"), nS, nA, EdgeType.DIRECTED);
+		g.addEdge(new MyLink(1, "A-B"), nA, nB, EdgeType.DIRECTED);
+		g.addEdge(new MyLink(1, "B-D"), nB, nD, EdgeType.DIRECTED);
+
+		g.addEdge(new MyLink(2, "S-E"), nS, nE, EdgeType.DIRECTED);
+		g.addEdge(new MyLink(2, "E-F"), nE, nF, EdgeType.DIRECTED);
+		g.addEdge(new MyLink(2, "F-B"), nF, nB, EdgeType.DIRECTED);
+
+		g.addEdge(new MyLink(2, "A-G"), nA, nG, EdgeType.DIRECTED);
+		g.addEdge(new MyLink(2, "G-H"), nG, nH, EdgeType.DIRECTED);
+		g.addEdge(new MyLink(2, "H-D"), nH, nD, EdgeType.DIRECTED);
+
+		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			@Override
+			public Number transform(MyLink link) {
+				return link.getWeight();
+			}
+		};
+		SuurballeTarjan<String, MyLink> testMain = new SuurballeTarjan<String, MyLink>(
+				g, weightTrans);
+		assertEquals("[[S-A, A-G, G-H, H-D], [S-E, E-F, F-B, B-D]]", testMain
+				.getDisjointPaths(nS, nD).toString());
+	}
+
+	@Test
 	public void testSuurballe2() {
 		Graph<String, MyLink> g = new DirectedOrderedSparseMultigraph<String, MyLink>();
 

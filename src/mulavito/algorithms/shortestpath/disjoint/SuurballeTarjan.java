@@ -134,8 +134,9 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 				MapTransformer.getInstance(lengthMap));
 
 		// Get shortest path in g with reversed shortest path...
+		Graph<V, E> revG = reverseEdges(graph, sp);
 		DijkstraShortestPath<V, E> revDijkstra = new DijkstraShortestPath<V, E>(
-				reverseEdges(graph, sp), lengthTrans);
+				revG, lengthTrans);
 
 		if (revDijkstra.getDistance(source, target) == null) {
 			// no alternate path
@@ -144,7 +145,39 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 			return result;
 		}
 
-		return findTwoWays(sp, revDijkstra.getPath(source, target));
+		List<E> revSp = revDijkstra.getPath(source, target);
+
+		validate(source, target, sp, graph);
+		validate(source, target, revSp, revG);
+
+		List<List<E>> paths = findTwoWays(sp, revSp);
+
+		// Check path validity.
+		for (List<E> path : paths)
+			validate(source, target, path, graph);
+
+		return paths;
+	}
+
+	private void validate(V source, V target, List<E> path, Graph<V, E> graph)
+			throws AssertionError {
+		if (!graph.isSource(source, path.get(0)))
+			throw new AssertionError("invalid source");
+
+		Iterator<E> it = path.iterator();
+		E e1 = it.next();
+
+		while (it.hasNext()) {
+			E e2 = it.next();
+
+			if (!graph.isSource(graph.getDest(e1), e2))
+				throw new AssertionError("invalid path");
+
+			e1 = e2;
+		}
+
+		if (!graph.isDest(target, path.get(path.size() - 1)))
+			throw new AssertionError("invalid destination");
 	}
 
 	/**
@@ -158,9 +191,10 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 	 */
 	private List<List<E>> findTwoWays(List<E> path1, List<E> path2) {
 		List<E> spCopy = new LinkedList<E>(path1);
+		final V source = graph.getSource(spCopy.get(0));
 		final V target = graph.getDest(spCopy.get(spCopy.size() - 1));
 
-		// if there is the same link in both paths, delete them
+		// Remove common links.
 		Iterator<E> it1 = path1.iterator();
 		while (it1.hasNext()) {
 			E iLink = it1.next();
@@ -170,7 +204,10 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 				E oLink = it2.next();
 				// ensure disjointness
 				if (comparator.compare(iLink, oLink) == 0) { // for multigraph
-					if (graph.isDest(target, iLink)) {
+					if (graph.isSource(source, iLink)
+							|| graph.isSource(source, oLink)
+							|| graph.isDest(target, iLink)
+							|| graph.isDest(target, oLink)) {
 						// Removing required edge, so there is no solution
 						LinkedList<List<E>> result = new LinkedList<List<E>>();
 						result.add(spCopy);
