@@ -150,7 +150,16 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 		validate(source, target, sp, graph);
 		validate(source, target, revSp, revG);
 
+		LinkedList<E> spCopy = new LinkedList<E>(sp);
+
 		List<List<E>> paths = findTwoWays(sp, revSp);
+
+		if (paths == null) {
+			// no disjoint solution found, just return shortest path
+			LinkedList<List<E>> result = new LinkedList<List<E>>();
+			result.add(spCopy);
+			return result;
+		}
 
 		// Check path validity.
 		for (List<E> path : paths)
@@ -190,29 +199,25 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 	 * @return the two disjoint paths
 	 */
 	private List<List<E>> findTwoWays(List<E> path1, List<E> path2) {
-		List<E> spCopy = new LinkedList<E>(path1);
-		final V source = graph.getSource(spCopy.get(0));
-		final V target = graph.getDest(spCopy.get(spCopy.size() - 1));
+		final V source = graph.getSource(path1.get(0));
+		final V target = graph.getDest(path1.get(path1.size() - 1));
 
 		// Remove common links.
 		Iterator<E> it1 = path1.iterator();
 		while (it1.hasNext()) {
-			E iLink = it1.next();
+			E e1 = it1.next();
 
 			Iterator<E> it2 = path2.iterator();
 			while (it2.hasNext()) {
-				E oLink = it2.next();
+				E e2 = it2.next();
+
 				// ensure disjointness
-				if (comparator.compare(iLink, oLink) == 0) { // for multigraph
-					if (graph.isSource(source, iLink)
-							|| graph.isSource(source, oLink)
-							|| graph.isDest(target, iLink)
-							|| graph.isDest(target, oLink)) {
-						// Removing required edge, so there is no solution
-						LinkedList<List<E>> result = new LinkedList<List<E>>();
-						result.add(spCopy);
-						return result;
-					}
+				if (comparator.compare(e1, e2) == 0) { // for multigraph
+					if (graph.isSource(source, e1)
+							|| graph.isSource(source, e2)
+							|| graph.isDest(target, e1)
+							|| graph.isDest(target, e2))
+						return null; // Removing required edge
 
 					it1.remove();
 					it2.remove();
@@ -221,53 +226,20 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 			}
 		}
 
-		if (path1.isEmpty() || path2.isEmpty()) {
-			// no disjoint solution found, just return shortest path
-			LinkedList<List<E>> result = new LinkedList<List<E>>();
-			result.add(spCopy);
-			return result;
-		}
+		if (path1.isEmpty() || path2.isEmpty())
+			return null; // no disjoint solution found
 
 		// Now recombine the two paths.
 		List<E> union = ListUtils.union(path1, path2); // concatenate
 
-		LinkedList<E> p1 = new LinkedList<E>(); // provides getLast
-		p1.add(path1.get(0));
-		union.remove(path1.get(0));
-		V curDest;
-		while (!(curDest = graph.getDest(p1.getLast())).equals(target)) {
-			boolean progress = false;
-			for (E e : union)
-				if (graph.getSource(e).equals(curDest)) {
-					p1.add(e);
-					progress = true;
-					union.remove(e);
-					break;
-				}
+		List<E> p1 = recombinePaths(path1, target, union);
+		if (p1 == null)
+			return null;
 
-			if (!progress)
-				throw new AssertionError("infinite loop");
-
-			if (union.isEmpty()) {
-				if (!graph.isDest(target, p1.getLast())) {
-					throw new AssertionError("bug");
-				} else
-					break;
-			}
-		}
-
-		LinkedList<E> p2 = new LinkedList<E>(); // provides getLast
-		p2.add(path2.get(0));
-		union.remove(path2.get(0));
-		while (!(curDest = graph.getDest(p2.getLast())).equals(target)) {
-			for (E e : union)
-				if (graph.isSource(curDest, e)) {
-					p2.add(e);
-					break;
-				}
-			union.remove(p2.getLast());
-		}
-
+		List<E> p2 = recombinePaths(path2, target, union);
+		if (p2 == null)
+			return null;
+		
 		if (!union.isEmpty())
 			throw new AssertionError("BUG");
 
@@ -275,6 +247,35 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 		solution.add(p1);
 		solution.add(p2);
 		return solution;
+	}
+
+	private List<E> recombinePaths(List<E> path, V target, List<E> union) {
+		LinkedList<E> p = new LinkedList<E>(); // provides getLast
+		p.add(path.get(0));
+		union.remove(path.get(0));
+
+		V curDest;
+		while (!(curDest = graph.getDest(p.getLast())).equals(target)) {
+			boolean progress = false;
+			for (E e : union)
+				if (graph.isSource(curDest, e)) {
+					p.add(e);
+					progress = true;
+					union.remove(e);
+					break;
+				}
+
+			if (!progress)
+				return null;
+
+			if (union.isEmpty()) {
+				if (!graph.isDest(target, p.getLast())) {
+					throw new AssertionError("bug");
+				} else
+					break;
+			}
+		}
+		return p;
 	}
 
 	/**
