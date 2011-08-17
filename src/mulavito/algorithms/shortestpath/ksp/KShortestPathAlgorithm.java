@@ -60,7 +60,8 @@ public abstract class KShortestPathAlgorithm<V, E> extends
 	 *            The destination
 	 * @param k
 	 *            The number of shortest paths to calculate
-	 * @return the first k shortest paths from source to target
+	 * @return a list with up to <code>k</code> shortest paths from source to
+	 *         target or an EMPTY list if target is not reachable from source
 	 */
 	protected abstract List<List<E>> getShortestPathsIntern(final V source,
 			final V target, int k);
@@ -72,7 +73,8 @@ public abstract class KShortestPathAlgorithm<V, E> extends
 	 *            The destination
 	 * @param k
 	 *            The number of shortest paths to calculate
-	 * @return the first k shortest paths from source to target
+	 * @return a list with up to <code>k</code> shortest paths from source to
+	 *         target or an EMPTY list if target is not reachable from source
 	 */
 	public final List<List<E>> getShortestPaths(final V source, final V target,
 			int k) {
