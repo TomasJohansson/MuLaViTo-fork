@@ -1,6 +1,19 @@
 CHANGELOG MuLaViTo
 ==================
 
+Version 0.9, 2011-10-28
+-----------------------
+- Improve implementation of Suurballe-Tarjan disjoint shortest path algorithm
+  - Derive from common ShortestPathAlgorithm class
+  - Allow to generalize comparison of edges for disjointness
+  - In case there is no disjoint path, return just one path and not an
+    additional empty list
+  - Skip a superfluous shortest path calculation
+  - Fix possible infinite loop
+  - Adopt algorihtms for multi-graphs
+- Add BernoulliStream distribution to mulavito.utils.distributions
+- Fix build error regarding Java META-INF that prevented signing of JARs
+
 Version 0.8, 2011-05-31
 -----------------------
 - Better check for Java version on Apple
