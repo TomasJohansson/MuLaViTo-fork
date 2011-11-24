@@ -100,8 +100,8 @@ public class SampleGraphDocument {
 			int numEdges = rnd.nextInt(numVertices * 2);
 			MyV[] vertices = layer.getVertices().toArray(new MyV[0]);
 			for (int j = 0; j < numEdges; j++) {
-				MyV a = vertices[rnd.nextInt(numVertices)], b = vertices[rnd
-						.nextInt(numVertices)];
+				MyV a = vertices[rnd.nextInt(numVertices - 1)];
+				MyV b = vertices[rnd.nextInt(numVertices - 1)];
 				if (a == b || layer.findEdge(a, b) != null)
 					continue;
 				layer.addEdge(layer.getEdgeFactory().create(), a, b);

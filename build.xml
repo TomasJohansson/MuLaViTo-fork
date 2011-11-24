@@ -108,7 +108,7 @@
 			<filelist id="docfiles" dir="${basedir}" files="AUTHORS,CHANGELOG,COPYING,README" />
 		</jar>
 		<zip destfile="${out}/MuLaViTo-src.zip" update="true">
-			<fileset dir="${basedir}/src" />
+			<zipfileset dir="${basedir}/src" prefix="src/" />
 			<filelist id="docfiles" dir="${basedir}" files="AUTHORS,build.xml,CHANGELOG,COPYING,README" />
 		</zip>
 	</target>
