@@ -1,6 +1,12 @@
 CHANGELOG MuLaViTo
 ==================
 
+Version 0.9.1, 2011-12-30
+-------------------------
+- Update for Java 7 and release of MuLaNEO
+- Fix IndexOutOfBounds exception with samples
+- README in Markdown syntax
+
 Version 0.9, 2011-10-28
 -----------------------
 - Apply fix to build script to allow building via ant as described in the wiki
@@ -11,7 +17,7 @@ Version 0.9, 2011-10-28
     additional empty list
   - Skip a superfluous shortest path calculation
   - Fix possible infinite loop
-  - Adopt algorihtms for multi-graphs
+  - Adopt algorithms for multi-graphs
 - Add BernoulliStream distribution to mulavito.utils.distributions
 - Fix build error regarding Java META-INF that prevented signing of JARs
 
