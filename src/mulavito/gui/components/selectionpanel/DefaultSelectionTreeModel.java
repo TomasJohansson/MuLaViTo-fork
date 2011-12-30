@@ -36,7 +36,6 @@ import javax.swing.tree.TreePath;
 import mulavito.gui.components.LayerViewer;
 
 /**
- * 
  * @author Julian Ott
  * @since 2010-10-07
  */
@@ -48,7 +47,7 @@ public class DefaultSelectionTreeModel implements TreeModel {
 	}
 
 	/** Proxy for {@link LayerViewer#getPickedEdgeState()} */
-	abstract class ObjectSelectionProxy implements IProxy {
+	private abstract class ObjectSelectionProxy implements IProxy {
 		protected abstract Object[] extractSelectedObjects(LayerViewer<?, ?> vv);
 
 		protected abstract String getObjectName();

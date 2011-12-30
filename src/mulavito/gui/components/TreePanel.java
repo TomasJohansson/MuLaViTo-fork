@@ -48,24 +48,16 @@ import mulavito.graph.AbstractLayerStack;
  * 
  * @author Michael Duelli
  * @author Julian Ott
+ * @since 2011-04-27
  */
 @SuppressWarnings("serial")
 public class TreePanel extends JPanel {
 	private GraphPanel<?, ?> graphPanel;
-	private JTree tree;
+	private final JTree tree;
 	private String caption;
 	private final PropertyChangeListener graphPanelListener;
 
 	public TreePanel(GraphPanel<?, ?> graphpanel) {
-		this();
-		setGraphPanel(graphpanel);
-	}
-
-	/**
-	 * use the constructor with parameter instead
-	 */
-	@Deprecated
-	public TreePanel() {
 		super(new BorderLayout());
 
 		tree = new JTree(createTreeModel());
@@ -96,6 +88,7 @@ public class TreePanel extends JPanel {
 				}
 			}
 		};
+		setGraphPanel(graphpanel);
 	}
 
 	/** called when default tree model needs to bee created */

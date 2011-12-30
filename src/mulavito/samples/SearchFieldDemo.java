@@ -73,7 +73,7 @@ public final class SearchFieldDemo extends Gui implements ActionListener {
 	}
 
 	private final AbstractSearchField search;
-	private JList list;
+	private JList<String> list;
 
 	public SearchFieldDemo() {
 		super("MuLaViTo SearchBar Demo");
@@ -109,8 +109,9 @@ public final class SearchFieldDemo extends Gui implements ActionListener {
 
 	@Override
 	protected JComponent createCenterPane() {
-		return list = new JList(new Object[] { "one", "two", "three", "four",
-				"five", "six", "seven", "eight", "nine", "ten" });
+		String[] strings = { "one", "two", "three", "four", "five", "six",
+				"seven", "eight", "nine", "ten" };
+		return list = new JList<String>(strings);
 	}
 
 	@Override

@@ -38,7 +38,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
@@ -111,29 +110,7 @@ public class Gui extends JFrame {
 	public Gui(String title) {
 		super(title);
 
-		if (!((System.getProperty("java.vendor").indexOf(
-				"Sun Microsystems Inc.") >= 0
-				|| System.getProperty("java.vendor").indexOf(
-						"Oracle Corporation") >= 0 || System.getProperty(
-				"java.vendor").indexOf("Apple") >= 0) && System.getProperty(
-				"java.vm.name").indexOf("Java HotSpot(TM)") >= 0)) {
-			if (JOptionPane.showConfirmDialog(this, "Java version Problem:\n"
-					+ "This application requires Sun/Oracle Java.\n"
-					+ "There are known visualization problems with OpenJDK.\n"
-					+ "Continue anyway?", title, JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.ERROR_MESSAGE) != JOptionPane.OK_OPTION) {
-				setVisible(false);
-				dispose();
-				System.exit(0);
-			}
-		}
-
 		try {
-			// LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
-			//
-			// for (LookAndFeelInfo laf : lafs)
-			// System.out.println(laf.getName());
-
 			// Set System L&F
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			SwingUtilities.updateComponentTreeUI(this);
