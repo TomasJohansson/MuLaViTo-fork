@@ -61,6 +61,7 @@ Basic Structure
 ---------------
 
 The Java package hierarchy of MuLaViTo is structured as follows:
+
 * ''AUTHORS'' -- A list of contributors to MuLaViTo and their affiliations
 * ''COPYING'' -- The license information (GPL, LGPL)
 * ''README'' -- This file 
@@ -84,11 +85,12 @@ Event Reference
 
 Nearly all GUI class designs follow the setter/event handler pattern.
 Here is a comprehensive list of events that can be listened to:
+
 * mulavito.gui.components.GraphPanel<?,?>
- 	* PropertyChange "LayerStack": called before the LayerStack property changes
-	  with NewValue being the LayerStack to be set and OldValue the current loaded
-  	  LayerStack
-  	* PropertyChange "Viewers": called when LayerViewers get added or removed.
-  	    * after adding: NewValue is the new viewer, OldValue is null
-  	    * before removing: NewValue is null, OldValue is the Viewer being removed.
-  	Classes having a property binding to a GraphPanel should listen to these events.
+    * PropertyChange "LayerStack": called before the LayerStack property changes
+      with NewValue being the LayerStack to be set and OldValue the current loaded
+      LayerStack
+    * PropertyChange "Viewers": called when LayerViewers get added or removed.
+        * after adding: NewValue is the new viewer, OldValue is null
+        * before removing: NewValue is null, OldValue is the Viewer being removed.
+      Classes having a property binding to a GraphPanel should listen to these events.
