@@ -239,7 +239,7 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 		List<E> p2 = recombinePaths(path2, target, union);
 		if (p2 == null)
 			return null;
-		
+
 		if (!union.isEmpty())
 			throw new AssertionError("BUG");
 
@@ -324,11 +324,16 @@ public class SuurballeTarjan<V, E> extends ShortestPathAlgorithm<V, E> {
 		Map<E, Double> map = new HashMap<E, Double>();
 
 		for (E link : graph1.getEdges()) {
-			double newWeight = nev.transform(link).doubleValue()
-					- slTrans.transform(graph1.getDest(link)).doubleValue()
-					+ slTrans.transform(graph1.getSource(link)).doubleValue();
+			Number dest_dist = slTrans.transform(graph1.getDest(link));
+			Number src_dist = slTrans.transform(graph1.getSource(link));
 
-			map.put(link, newWeight);
+			if (dest_dist == null || src_dist == null)
+				map.put(link, Double.NaN); // src or dest not reachable
+			else
+				map.put(link,
+						nev.transform(link).doubleValue()
+								- dest_dist.doubleValue()
+								+ src_dist.doubleValue());
 		}
 		return MapTransformer.getInstance(map);
 	}

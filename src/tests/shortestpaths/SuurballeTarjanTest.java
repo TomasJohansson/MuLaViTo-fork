@@ -322,4 +322,40 @@ public class SuurballeTarjanTest {
 				g, weightTrans);
 		assertEquals("[[A-B]]", testMain.getDisjointPaths(n1, n2).toString());
 	}
+
+	@Test
+	public void getDisconnectedScenario() {
+		Graph<String, MyLink> g = new DirectedOrderedSparseMultigraph<String, MyLink>();
+
+		String s = new String("S");
+		g.addVertex(s);
+		String a = new String("A");
+		g.addVertex(a);
+		String b = new String("B");
+		g.addVertex(b);
+		String c = new String("C");
+		g.addVertex(c);
+		String d = new String("D");
+		g.addVertex(d);
+		String e = new String("E");
+		g.addVertex(e);
+
+		g.addEdge(new MyLink(1, "S-A"), s, a, EdgeType.DIRECTED);
+		g.addEdge(new MyLink(1, "A-C"), a, c, EdgeType.DIRECTED);
+		g.addEdge(new MyLink(1, "S-B"), s, b, EdgeType.DIRECTED);
+		g.addEdge(new MyLink(1, "B-C"), b, c, EdgeType.DIRECTED);
+		// disconnected
+		g.addEdge(new MyLink(1, "D-E"), d, e, EdgeType.DIRECTED);
+
+		Transformer<MyLink, Number> weightTrans = new Transformer<MyLink, Number>() {
+			@Override
+			public Number transform(MyLink link) {
+				return link.getWeight();
+			}
+		};
+		SuurballeTarjan<String, MyLink> testMain = new SuurballeTarjan<String, MyLink>(
+				g, weightTrans);
+		assertEquals("[[S-A, A-C], [S-B, B-C]]", testMain
+				.getDisjointPaths(s, c).toString());
+	}
 }
