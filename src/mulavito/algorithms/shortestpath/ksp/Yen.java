@@ -196,7 +196,7 @@ public class Yen<V, E> extends KShortestPathAlgorithm<V, E> {
 			if (prioQ.isEmpty())
 				break; // We have not found any new candidate!
 			else
-				found_paths.add(prioQ.poll().getPath());
+				addValidPath(found_paths, prioQ.poll().getPath());
 		}
 
 		return found_paths;

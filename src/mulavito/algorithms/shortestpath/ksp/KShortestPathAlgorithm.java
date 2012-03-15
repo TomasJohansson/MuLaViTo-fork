@@ -96,4 +96,18 @@ public abstract class KShortestPathAlgorithm<V, E> extends
 
 		return source.equals(target);
 	}
+
+	/**
+	 * This can be specialized in a sub-class to introduce on-the-fly
+	 * post-filtering of computed paths.
+	 * 
+	 * @param found_paths
+	 *            The list of found paths
+	 * @param curPath
+	 *            The path to be validated
+	 */
+	protected boolean addValidPath(List<List<E>> found_paths, List<E> curPath) {
+		found_paths.add(curPath);
+		return true;
+	}
 }

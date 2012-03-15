@@ -222,7 +222,7 @@ public class Eppstein<V, E> extends KShortestPathAlgorithm<V, E> {
 			V curV = curPath.getLast();
 
 			if (curV.equals(target)) {
-				found_paths.add(curPath.getPath());
+				addValidPath(found_paths, curPath.getPath());
 				continue;
 			}
 
