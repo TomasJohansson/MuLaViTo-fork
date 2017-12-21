@@ -47,7 +47,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
-			<!--  <scope>test</scope> currently all code is till placed as it was when imported from sourceforge i.e. both tests and code in src folder -->
+			<scope>test</scope>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-svggen -->
@@ -84,11 +84,5 @@ Requirements
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 	</properties>	
-	
-	<build>
-		<!-- currently all code is till placed as it was when imported from sourceforge i.e. both tests and code in src folder -->
-		<sourceDirectory>src</sourceDirectory> <!-- needed since the Maven standard directory structure is not currently used i.e. "src/main/java" -->
-		<testSourceDirectory>src</testSourceDirectory>
-	</build>
 	
 </project>
