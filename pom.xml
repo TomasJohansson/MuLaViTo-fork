@@ -6,42 +6,30 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<dependencies>
-
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
-		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-collections4</artifactId>
-		    <version>4.1</version>
-		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/net.sourceforge.collections/collections-generic -->
-		<dependency>
-		    <groupId>net.sourceforge.collections</groupId>
-		    <artifactId>collections-generic</artifactId>
-		    <version>4.01</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/net.sf.jung/jung-graph-impl -->
+		<!--
+			The below dependency is needed to for example be able to use this class:  
+			edu.uci.ics.jung.graph.DirectedOrderedSparseMultigraph;
+			which is an implementation of 'Graph' which is used as parameter to the Yen class constructor
+		-->
+		<!-- https://mvnrepository.com/artifact/net.sf.jung/jung-graph-impl -->		 
 		<dependency>
 		    <groupId>net.sf.jung</groupId>
 		    <artifactId>jung-graph-impl</artifactId>
 		    <version>2.0.1</version>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/net.sf.jung/jung-algorithms -->
+ 
+		<!--
+			The below dependency is needed by the Yen class because it uses these classes:  
+			edu.uci.ics.jung.algorithms.filters.EdgePredicateFilter;
+			edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
+		-->
+		<!-- https://mvnrepository.com/artifact/net.sf.jung/jung-algorithms -->		
 		<dependency>
 		    <groupId>net.sf.jung</groupId>
 		    <artifactId>jung-algorithms</artifactId>
 		    <version>2.0.1</version>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/net.sf.jung/jung-visualization -->
-		<dependency>
-		    <groupId>net.sf.jung</groupId>
-		    <artifactId>jung-visualization</artifactId>
-		    <version>2.0.1</version>
-		</dependency>
-		
 		
 		<dependency>
 			<groupId>junit</groupId>
@@ -50,23 +38,11 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-svggen -->
-		<dependency>
-		    <groupId>org.apache.xmlgraphics</groupId>
-		    <artifactId>batik-svggen</artifactId>
-		    <version>1.7</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-dom -->
-		<dependency>
-		    <groupId>org.apache.xmlgraphics</groupId>
-		    <artifactId>batik-dom</artifactId>
-		    <version>1.7</version>
-		</dependency>
-		
 	</dependencies>
 
 <!--
-The above dependecies and the below usage of Java 1.7 is based on the following information from the website https://sourceforge.net/p/mulavito/ 
+The above dependencies and the below usage of Java 1.7 was based on the following information from the website https://sourceforge.net/p/mulavito/
+(but then I have removed some dependencies not needed for my purposes i.e. to use the "K Shortest Path" alghorithm)  
 Requirements
     - Java 7 or higher, http://www.openjdk.org or http://java.oracle.com
     The JUNG graph framework v2.0.1, http://jung.sf.net
