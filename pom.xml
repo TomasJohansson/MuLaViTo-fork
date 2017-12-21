@@ -1,0 +1,94 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>com.programmerare.shortest-paths</groupId>
+	<artifactId>fork-of-mulavito-at-sourceforge</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<dependencies>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-collections4</artifactId>
+		    <version>4.1</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/net.sourceforge.collections/collections-generic -->
+		<dependency>
+		    <groupId>net.sourceforge.collections</groupId>
+		    <artifactId>collections-generic</artifactId>
+		    <version>4.01</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/net.sf.jung/jung-graph-impl -->
+		<dependency>
+		    <groupId>net.sf.jung</groupId>
+		    <artifactId>jung-graph-impl</artifactId>
+		    <version>2.0.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/net.sf.jung/jung-algorithms -->
+		<dependency>
+		    <groupId>net.sf.jung</groupId>
+		    <artifactId>jung-algorithms</artifactId>
+		    <version>2.0.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/net.sf.jung/jung-visualization -->
+		<dependency>
+		    <groupId>net.sf.jung</groupId>
+		    <artifactId>jung-visualization</artifactId>
+		    <version>2.0.1</version>
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<!--  <scope>test</scope> currently all code is till placed as it was when imported from sourceforge i.e. both tests and code in src folder -->
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-svggen -->
+		<dependency>
+		    <groupId>org.apache.xmlgraphics</groupId>
+		    <artifactId>batik-svggen</artifactId>
+		    <version>1.7</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-dom -->
+		<dependency>
+		    <groupId>org.apache.xmlgraphics</groupId>
+		    <artifactId>batik-dom</artifactId>
+		    <version>1.7</version>
+		</dependency>
+		
+	</dependencies>
+
+<!--
+The above dependecies and the below usage of Java 1.7 is based on the following information from the website https://sourceforge.net/p/mulavito/ 
+Requirements
+    - Java 7 or higher, http://www.openjdk.org or http://java.oracle.com
+    The JUNG graph framework v2.0.1, http://jung.sf.net
+    Batik SVG Toolkit v1.7, http://xmlgraphics.apache.org/batik
+    Tango Icon Library, http://tango.freedesktop.org
+        Included in MuLaViTo (package img)
+    JUnit v4.x (for unit testing only), http://www.junit.org
+        E.g. built into Eclipse
+    ANT v1.7 (for running the build script,
+    not required for use in Eclipse), http://ant.apache.org
+-->
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+	</properties>	
+	
+	<build>
+		<!-- currently all code is till placed as it was when imported from sourceforge i.e. both tests and code in src folder -->
+		<sourceDirectory>src</sourceDirectory> <!-- needed since the Maven standard directory structure is not currently used i.e. "src/main/java" -->
+		<testSourceDirectory>src</testSourceDirectory>
+	</build>
+	
+</project>
