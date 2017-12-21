@@ -1,0 +1,54 @@
+The MuLaViTo project was forked because I was interested in the implementation of Yen's algorithm 
+for finding the "k shortest paths", to use it in an adapter/adaptee implementation in the following project of mine:
+https://github.com/TomasJohansson/adapters-shortest-paths/
+
+My own code in the above project is licensed as MIT, and for the adapters I want as permissive licenses as possible 
+and therefore I consider the license of MuLaViTo to be LGPL 3.0 since there seems to be an option to choose between LGPL 3.0 and GPL 3.0.  
+
+The MuLaViTo project has been forked from the following original URL: 
+	https://sourceforge.net/p/mulavito/
+My fork is located here:
+	https://github.com/TomasJohansson/MuLaViTo-fork
+
+My fork was created 2017-12-21 and at that date the latest commit at the original project was dated 2012-03-15 (i.e. more than 5 years ago).
+
+Regarding how the license information has been specified in the original MuLaViTo project: 
+
+	The file "COPYING" begins with the following text:
+		"
+			The following licenses are included in this file:
+			 - GPL 3.0
+			 - LGPL 3.0
+		"
+	 
+	Many (or maybe most/all?) of the Java code files (for example the file "/src/main/java/mulavito/algorithms/shortestpath/ksp/Yen.java")
+	contain the following text within the comment block at the top of the files:
+		"
+			MuLaViTo is free software; you can redistribute it and/or modify it
+			under the terms of the GNU General Public License Version 3 or later
+			(the "GPL"), or the GNU Lesser General Public License Version 3 or later
+			(the "LGPL") as published by the Free Software Foundation.
+		" 
+
+Notice the word "or" in the part "or the GNU Lesser General Public License Version 3".
+
+As far as I understand (not being a lawyer or license expert) it means that anyone can choose either of those two licenses. 
+Then my choice is the more permissive LGPL (Lesser General Public License).
+
+Regarding my modifications in this fork of mine, I have NOT yet (and I do not plan to neither) 
+modified any of the existing Java files from the original project.
+
+Currently I have only done the following things with this fork:
+	* Added a Maven file pom.xml with dependencies to external libraries being used.
+	* Moved the Java files into standard Maven locations, i.e. "src/main/java" and "src/test/java" (from the current location "src" for both test code and the actual code under test).
+	* Added a test for the Yen class ('/src/test/java/mulavito/algorithms/shortestpath/ksp/YenTest.java') because I wanted to test the Yen class since using that class was my reason for forking the project.
+	* Updated the file .gitignore (one addition and some removals).
+	* Removed some dependencies to external libraries (jung-visualization, batik-svggen, batik-dom). 
+		Please see the git history for more details (groupId and artifactId) about which dependencies have been removed.
+		(but note that there are different branches at my github repository page, and one of the branches is still keeping all original files) 
+		Notice that it looks like (in git history) like dependencies also was removed regarding the library "collections-generic",   
+		but that library is still being used though as an indirect dependency through the "jung" libraries still in the pom file.
+		I also removed approximately 45 Java classes from the project (in of the branches, since as mentioned above, there are more than one branch)  
+		Those removed Java classes were mostly GUI related or sample files or files needing the external libraries I wanted to remove.
+ 
+/ Tomas Johansson, 2017-12-21
